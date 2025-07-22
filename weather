@@ -1,0 +1,56 @@
+import tkinter as tk
+from tkinter import ttk
+import requests
+
+def get_weather():
+    city=entry.get()
+    if city and city !="Enter city":
+        api_key="67b53404eb60fa55265ab65affc62a71"
+        url=f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+        response=requests.get(url)
+        print("resp",response)
+        if response.status_code ==200:
+            data=response.json()
+            print("response",data)
+            weather=data['weather'][0]['description']
+            temp=data['main']['temp']
+            result_label.config(text=f"{city}\n{weather.title()}\n{temp}C")
+        else:
+            result_label.config(text="city not found.")
+
+def clear_placeholder(event):
+    if entry.get()=="Enter City":
+        entry.delete(0,tk.END)
+        entry.config(fg="black")
+
+def add_placeholder(event):
+    if entry.get()=="":
+        entry.insert(0,"Enter city")
+        entry.config(fg="gray")
+
+#GUI setup
+root=tk.Tk()
+root.title("⛅Weather App")
+root.geometry("350x300")
+root.config(bg="#e6f7ff")
+
+#Title label
+title=tk.Label(root,text="Weather App",bg="#ef67ff",fg="#003366")
+title.pack(pady=10)
+
+#Entry with placeholder
+entry = tk.Entry(root, width=30, font=("Segoe UI", 12, "bold"), fg="gray")
+entry.insert(0,"Enter city")
+entry.bind("<FocusIn>",clear_placeholder)
+entry.bind("<FocusOut>",add_placeholder)
+entry.pack(pady=10)
+
+#Button 
+btn=tk.Button(root,text="🌿Get Weather",command=get_weather,bg="#007acc",fg="white",font=("Segoe UI",10,"bold"), relief="ridge",bd=3,padx=10,pady=5)
+btn.pack(pady=5)
+
+#Result label
+result_label=tk.Label(root,text="",font=("Segoe UI",12),bg="#007acc",fg="#333333")
+result_label.pack(pady=20)
+
+root.mainloop()
