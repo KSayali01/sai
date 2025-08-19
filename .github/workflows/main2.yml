@@ -1,0 +1,19 @@
+name: Basic Commands
+
+on:
+
+  workflow_dispatch:
+
+jobs:
+  demo-commands:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Show current working directory
+        run: pwd
+
+      - name: List files in the directory
+        run: ls -la
